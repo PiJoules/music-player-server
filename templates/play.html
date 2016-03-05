@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block play %}
+
+<h3> {{ title }} </h3>
+  <audio controls autoplay>
+    <source src="/static/audio/{{audio_file}}" type="audio/ogg">
+    Your browser does not support this audio format.
+  </audio>
+{% endblock %}

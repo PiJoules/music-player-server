@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block play %}
+{% for audio_file in audio_files %}
+<p><a href="{{ url_for("song_route", filename=audio_file) }}"> {{ loop.index }}) {{ audio_file }}</a></p>
+{% endfor %}
+{% endblock %}
