@@ -11,6 +11,13 @@ html {
     width: 100%;
     height: 110px;
 }
-.song-card {
+.play-click {
     cursor: pointer;
+}
+.card-buttons {
+    position: absolute;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }

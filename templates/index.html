@@ -6,15 +6,20 @@
 {% block main %}
 {% for song in songs %}
 <div class="col-sm-3">
-  <div class="panel song-card" data-number="{{ loop.index0 }}">
+  <div class="panel">
     <div class="panel-body index-card">
-        <img class="media-object" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 100%;">
+        <div class="card-buttons" style="position: absolute;">
+          <a href="{{ url_for('edit_song_route', filename=song.base_src) }}" class="btn btn-raised btn-info btn-xs">Edit</a>
+        </div>
+        <img class="media-object play-click" data-number="{{ loop.index0 }}" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 100%;">
     </div>
     <div class="panel-footer">
       {% set min = (song.duration / 60)|int %}
       {% set sec = song.duration % 60 %}
-      <h3 class="panel-title">{{ song.title }} <small>({{ min }}:{{ sec }})</small></h3>
-      <p>{{ song.artist }}</p>
+      <div class="play-click" data-number="{{ loop.index0 }}">
+        <h3 class="panel-title">{{ song.title }} <small>({{ min }}:{{ sec }})</small></h3>
+        <p>{{ song.artist }}</p>
+      </div>
     </div>
   </div>
 </div>
@@ -65,7 +70,7 @@
     });
 
     /* Play clicked song */
-    $(".song-card").click(function(){
+    $(".play-click").click(function(){
         var number = parseInt($(this).data("number"));
         if (song_num !== number){
             setSong(number);

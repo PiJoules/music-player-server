@@ -20,8 +20,8 @@ http://tuxpool.blogspot.com/2013/02/how-to-store-images-in-mp3-files-using.html
 - Add easy way to get new songs.
 - Add way to sync songs in here to the app.
   - Do along side working on app.
-- Add button on cards on index page to navigate to edit route.
 - Add search and genres + tags to help search.
+- Add shuffle button.
 
 
 ## Resources

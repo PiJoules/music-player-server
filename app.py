@@ -10,7 +10,7 @@ from __future__ import print_function
 import os
 import eyed3
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from uuid import uuid4
 from config import WORKING_DIR
 from song import Song
@@ -47,7 +47,7 @@ def edit_song_route(filename):
         # This is specified in the eyed3 docs.
         tag.images.set(3, cover.read(), cover.mimetype)
     tag.save()
-    return ""
+    return redirect(url_for("index_route"))
 
 
 if __name__ == "__main__":
