@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block main %}
 {% for song in songs %}
 <div class="col-sm-3">
-  <div class="panel">
+  <div class="panel song-card" data-number="{{ loop.index0 }}">
     <div class="panel-body index-card">
         <img class="media-object" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 100%;">
     </div>
@@ -34,17 +38,37 @@
 
 {% block scripts %}
 <script>
+    /* Control songs */
     var songs = [
         {% for song in songs %}
             "{{ song.server_src }}",
         {% endfor %}    
     ];
-    var song_num = 1;
-    $("#player").on("ended", function(){
-        $(this).attr("src", songs[song_num]);
+    var song_num = 0;  // Current song playing
+    var player = $("#player");
+    function setSong(next_song_num){
+        player.attr("src", songs[next_song_num]);
+        song_num = next_song_num;
+    }
+
+    /* Play next song on complete */
+    player.on("ended", function(){
         song_num++;
-        if (song_num > songs.length){
+
+        // Reset songs
+        if (song_num >= songs.length){
             song_num = 0;
+        }
+
+        setSong(song_num);
+
+    });
+
+    /* Play clicked song */
+    $(".song-card").click(function(){
+        var number = parseInt($(this).data("number"));
+        if (song_num !== number){
+            setSong(number);
         }
     });
 </script>

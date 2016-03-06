@@ -21,6 +21,9 @@
 
     <!-- Custom css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+    {% block styles %}
+    {% endblock %}
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
