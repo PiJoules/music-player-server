@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="container">
+  <div class="col-md-6">
+    <div class="well bs-component">
+      <form class="form-horizontal" action="{{ url_for('edit_song_route', filename=song.base_src) }}" method="post" enctype=multipart/form-data>
+        <fieldset>
+          <legend>
+            <p>Edit metadata for</p>
+            <p><small>'{{ song.base_src }}'</small></p>
+          </legend>
+
+          <!-- Title -->
+          <div class="form-group is-empty">
+            <label class="col-md-2 control-label">Title</label>
+            <div class="col-md-10">
+              <input class="form-control" name="title" id="title" placeholder="Title" value="{{ song.title or '' }}" type="test">
+            </div>
+            <span class="material-input"></span>
+          </div>
+
+          <!-- Artist -->
+          <div class="form-group is-empty">
+            <label class="col-md-2 control-label">Artist</label>
+            <div class="col-md-10">
+              <input class="form-control" name="artist" id="artist" placeholder="Artist" value="{{ song.artist or '' }}" type="test">
+            </div>
+            <span class="material-input"></span>
+          </div>
+
+          <!-- Album -->
+          <div class="form-group is-empty">
+            <label class="col-md-2 control-label">Album</label>
+            <div class="col-md-10">
+              <input class="form-control" name="album" id="album" placeholder="Album" value="{{ song.album or '' }}" type="test">
+            </div>
+            <span class="material-input"></span>
+          </div>
+
+          <!-- Cover -->
+          <div class="form-group is-empty is-fileinput">
+            <label class="col-md-2 control-label">Cover</label>
+            <div class="col-md-10">
+              <input readonly="" class="form-control" placeholder="Browse..." type="text">
+              <input id="cover" multiple="" name="cover" type="file">
+              <img id="preview" style="width: 100%;" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="" />
+            </div>
+            <span class="material-input"></span>
+          </div>
+
+          <!-- Submit -->
+          <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+              <button type="button" class="btn btn-default">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit<div class="ripple-container"></div></button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/edit.js') }}"></script>
+{% endblock %}
