@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Music Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Material Design fonts -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
@@ -14,6 +15,9 @@
     <!-- Bootstrap Material Design -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/css/bootstrap-material-design.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/css/ripples.min.css">
+
+    <!-- bootstrap3_player -->
+    <link href="{{ url_for('static', filename='css/bootstrap3_player.css') }}" rel="stylesheet">
 
     <!-- Custom css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
@@ -42,11 +46,22 @@
       {% block main %}{% endblock %}
     </div>
 
+    {% block footer %}
+    {% endblock %}
+
     <!-- Javascript -->
+    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <!-- Boostrap3 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- Boostrap material design -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/js/material.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/js/ripples.min.js"></script>
+
+    <!-- bootstrap3_player -->
+    <script src="{{ url_for('static', filename='js/bootstrap3_player.js') }}"></script>
     {% block scripts %}{% endblock %}
   </body>
 </html>

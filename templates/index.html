@@ -1,25 +1,33 @@
 {% extends 'base.html' %}
 {% block main %}
 {% for song in songs %}
-<div class="col-md-3">
-  <a href="{{ url_for("song_route", filename=song.base_src) }}">
-    <div class="panel panel-info">
-
-  <div class="panel-body">
-      <img class="media-object" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 100%;">
-  </div>
-  <div class="panel-footer">
-    <h3 class="panel-title">{{ song.title }}</h3>
-  </div>
+<div class="col-sm-3">
+  <div class="panel">
+    <div class="panel-body index-card">
+        <img class="media-object" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 100%;">
     </div>
-  </a>
+    <div class="panel-footer">
+      {% set min = (song.duration / 60)|int %}
+      {% set sec = song.duration % 60 %}
+      <h3 class="panel-title">{{ song.title }} <small>({{ min }}:{{ sec }})</small></h3>
+      <p>{{ song.artist }}</p>
+    </div>
+  </div>
 </div>
-    <!--<div class="media-left">
-        <img class="media-object" src="data:image/png;base64,{{ song.base64_cover or '' }}" alt="{{ song.title }}" style="width: 200px;">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading"><a href="{{ url_for("song_route", filename=song.base_src) }}">{{ song.title }}</a></h4>
-    </div>-->
 {% endfor %}
+{% endblock %}
+
+{% block footer %}
+{% if songs %}
+<footer class="footer">
+  <div class="container">
+    <audio controls autoplay>
+      {% set first_song = songs.0 %}
+      <source src="{{ first_song.server_src }}" type="audio/mpeg" />
+      <a href="http://www.w3schools.com/html/horse.mp3">horse</a>
+      An html5-capable browser is required to play this audio. 
+    </audio>
+  </div>
+</footer>
+{% endif %}
 {% endblock %}

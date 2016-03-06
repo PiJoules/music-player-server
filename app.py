@@ -26,14 +26,34 @@ WORKING_DIR = "static/audio"
 class Song(object):
     """Container for song info."""
 
-    __slots__ = ("title", "artist", "album", "cover", "src", "base_src")
+    __slots__ = ("title", "artist", "album", "cover", "src", "base_src",
+                 "server_src", "duration")
 
     def __init__(self, src, **kwargs):
+        """
+        title/artist/album:
+            Strings that should be obvious of what they represent.
+        cover:
+            Binary image data (bot base64 encoded, but can be base64 encoded).
+        src:
+            The OS path of the file. Can be relative or absolute.
+        base_src:
+            The base filename.
+        server_src:
+            The server path of the file, where '/' is the root of the server,
+            not the OS. Can be relative or absolute.
+        duration:
+            Length of the song in seconds.
+        """
         for attr in self.__slots__:
             val = kwargs.get(attr, None)
             setattr(self, attr, val)
         self.src = src
         self.base_src = os.path.basename(src)
+
+        app_root = os.path.dirname(os.path.abspath(__file__))
+        src_real = os.path.realpath(src)
+        self.server_src = os.path.join("/", src_real[len(app_root):])
 
     @classmethod
     def from_path(cls, path):
@@ -41,16 +61,17 @@ class Song(object):
         Create a song obj from the path to the file.
 
         This path must be the actual path of the computer this server is
-        running on, not the relative flask server. '/' represents the OS root,
-        not the flask root.
+        running on, not the flask server. If path starts with '/', this
+        represents the OS root, not the flask root.
         """
-        tag = eyed3.load(path).tag
+        audio_file = eyed3.load(path)
+        tag = audio_file.tag
         if tag.images:
             cover = tag.images[0]
         else:
             cover = None
         return cls(path, title=tag.title, artist=tag.artist, album=tag.album,
-                   cover=cover)
+                   cover=cover, duration=audio_file.info.time_secs)
 
     @property
     def base64_cover(self):
@@ -73,18 +94,15 @@ def index_route():
                            songs=songs)
 
 
-@app.route("/<filename>/edit", methods=["GET", "POST"])
+@app.route("/edit/<filename>", methods=["GET", "POST"])
 def edit_song_route(filename):
     """Route for editing song info."""
     relpath = os.path.join(WORKING_DIR, filename)
     if request.method == "GET":
         song = Song.from_path(relpath)
-        print(song)
         return render_template("edit.html", song=song)
 
     # POST
-    print(request.form)
-    print(request.files)
     cover = request.files.get("cover", None)
     tag = eyed3.load(relpath).tag
     tag.artist = request.form["artist"]
@@ -94,24 +112,6 @@ def edit_song_route(filename):
         tag.images.set(3, cover.read(), cover.mimetype)
     tag.save()
     return ""
-
-
-@app.route("/<filename>")
-def song_route(filename):
-    relpath = os.path.join(WORKING_DIR, filename)
-    fullpath = os.path.join("/", relpath)
-    audio_file = eyed3.load(relpath)
-    print(audio_file.tag)
-    print(audio_file.tag.artist)
-    print(audio_file.tag.album)
-    print(audio_file.tag.album_artist)
-    print(audio_file.tag.title)
-    print(list(audio_file.tag.images))
-    print(audio_file.info.time_secs)
-
-    return render_template("play.html",
-                           title=filename,
-                           audio_file=fullpath)
 
 
 if __name__ == "__main__":
