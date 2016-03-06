@@ -21,7 +21,7 @@
 {% if songs %}
 <footer class="footer">
   <div class="container">
-    <audio controls autoplay>
+    <audio id="player" controls autoplay>
       {% set first_song = songs.0 %}
       <source src="{{ first_song.server_src }}" type="audio/mpeg" />
       <a href="http://www.w3schools.com/html/horse.mp3">horse</a>
@@ -30,4 +30,22 @@
   </div>
 </footer>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var songs = [
+        {% for song in songs %}
+            "{{ song.server_src }}",
+        {% endfor %}    
+    ];
+    var song_num = 1;
+    $("#player").on("ended", function(){
+        $(this).attr("src", songs[song_num]);
+        song_num++;
+        if (song_num > songs.length){
+            song_num = 0;
+        }
+    });
+</script>
 {% endblock %}
